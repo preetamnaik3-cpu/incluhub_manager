@@ -7,7 +7,10 @@
  */
 const fs = require("fs");
 const path = require("path");
+const WebSocket = require("ws");
 const { createClient } = require("@supabase/supabase-js");
+
+global.WebSocket = WebSocket;
 
 function loadEnvFile(filePath) {
   if (!fs.existsSync(filePath)) return {};

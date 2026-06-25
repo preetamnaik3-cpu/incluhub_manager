@@ -3,7 +3,10 @@
  * Seeds Elvix & Kosara projects and links existing data.
  */
 const fs = require("fs");
+const WebSocket = require("ws");
 const { createClient } = require("@supabase/supabase-js");
+
+global.WebSocket = WebSocket;
 
 const env = Object.fromEntries(
   fs.readFileSync(".env.local", "utf8")
