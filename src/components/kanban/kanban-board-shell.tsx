@@ -2,7 +2,7 @@
 
 import { KanbanBoard } from "@/components/kanban/kanban-board";
 import type { BoardWithColumns, Comment, Profile } from "@/lib/types";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 function KanbanBoardSkeleton() {
   return (
@@ -28,11 +28,11 @@ export function KanbanBoardShell({
   teamMembers: Profile[];
   commentsMap: Record<string, Comment[]>;
 }) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   if (!mounted) {
     return <KanbanBoardSkeleton />;

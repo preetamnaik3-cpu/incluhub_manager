@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
 
 export function LoginForm() {
@@ -24,16 +24,15 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [hasPendingInvite, setHasPendingInvite] = useState(!!inviteToken);
+  const hasStoredInvite = useSyncExternalStore(
+    () => () => {},
+    () => !!localStorage.getItem(PENDING_INVITE_KEY),
+    () => false
+  );
+  const hasPendingInvite = !!inviteToken || hasStoredInvite;
 
   useEffect(() => {
-    if (inviteToken) {
-      storePendingInvite(inviteToken);
-      setIsSignUp(true);
-      setHasPendingInvite(true);
-    } else if (localStorage.getItem(PENDING_INVITE_KEY)) {
-      setHasPendingInvite(true);
-    }
+    if (inviteToken) storePendingInvite(inviteToken);
   }, [inviteToken]);
 
   useEffect(() => {
