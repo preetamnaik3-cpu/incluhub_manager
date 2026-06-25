@@ -1,0 +1,11 @@
+# Supabase CLI config — project is linked in CI via secrets.
+# Local: run `supabase link --project-ref YOUR_REF`
+
+[db]
+major_version = 15
+
+[api]
+enabled = true
+
+[studio]
+enabled = true
