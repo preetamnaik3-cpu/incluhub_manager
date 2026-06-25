@@ -132,10 +132,14 @@ export function LoginForm() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {isSignUp && (
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-neutral-700">
+              <label
+                htmlFor="login-full-name"
+                className="mb-1.5 block text-sm font-medium text-neutral-700"
+              >
                 Full name
               </label>
               <Input
+                id="login-full-name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Your name"
@@ -144,10 +148,14 @@ export function LoginForm() {
             </div>
           )}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-neutral-700">
+            <label
+              htmlFor="login-email"
+              className="mb-1.5 block text-sm font-medium text-neutral-700"
+            >
               Email
             </label>
             <Input
+              id="login-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -156,10 +164,14 @@ export function LoginForm() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-neutral-700">
+            <label
+              htmlFor="login-password"
+              className="mb-1.5 block text-sm font-medium text-neutral-700"
+            >
               Password
             </label>
             <Input
+              id="login-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

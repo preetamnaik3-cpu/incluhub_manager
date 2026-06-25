@@ -147,6 +147,7 @@ npm run test:e2e
 | Secret | Value |
 |--------|-------|
 | `PLAYWRIGHT_BASE_URL` | Production URL (e.g. `https://incluhub-manager-git-main-pritam2k4s-projects.vercel.app`) |
+| `VERCEL_AUTOMATION_BYPASS_SECRET` | From Vercel → Project → Settings → Deployment Protection → **Protection Bypass for Automation** (required while deployment protection is on) |
 | `NEXT_PUBLIC_SUPABASE_URL` | Same as Vercel |
 | `SUPABASE_SERVICE_ROLE_KEY` | Same as Vercel (for seeding test users) |
 | `E2E_SUPER_ADMIN_EMAIL` | `preetam.naik3@gmail.com` |

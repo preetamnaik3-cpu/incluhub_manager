@@ -4,6 +4,13 @@ const baseURL =
   process.env.PLAYWRIGHT_BASE_URL?.replace(/\/$/, "") || "http://localhost:3000";
 
 const useProduction = Boolean(process.env.PLAYWRIGHT_BASE_URL);
+const bypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+
+if (process.env.CI && useProduction && !bypassSecret) {
+  throw new Error(
+    "VERCEL_AUTOMATION_BYPASS_SECRET is required when PLAYWRIGHT_BASE_URL points to a Vercel deployment with protection enabled. Generate it in Vercel → Project → Settings → Deployment Protection → Protection Bypass for Automation, then add it to GitHub Actions secrets."
+  );
+}
 
 export default defineConfig({
   testDir: "./e2e",
@@ -21,6 +28,14 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
+    ...(bypassSecret
+      ? {
+          extraHTTPHeaders: {
+            "x-vercel-protection-bypass": bypassSecret,
+            "x-vercel-set-bypass-cookie": "true",
+          },
+        }
+      : {}),
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: useProduction
