@@ -1,5 +1,6 @@
 "use server";
 
+import { getCurrentUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import type { TaskPriority } from "@/lib/types";
@@ -68,7 +69,21 @@ export async function moveTask(
   position: number,
   boardId: string
 ) {
+  const profile = await getCurrentUser();
+  if (!profile) throw new Error("Unauthorized");
+
   const supabase = await createClient();
+
+  const { data: task, error: fetchError } = await supabase
+    .from("tasks")
+    .select("id, column_id, assignee_id")
+    .eq("id", taskId)
+    .single();
+
+  if (fetchError || !task) throw new Error("Task not found");
+  if (profile.role !== "super_admin" && profile.role !== "manager") {
+    throw new Error("You cannot move this task");
+  }
 
   const { error } = await supabase
     .from("tasks")

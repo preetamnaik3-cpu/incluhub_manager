@@ -54,8 +54,8 @@ export function canEditTask(user: Profile, task: Task): boolean {
   return false;
 }
 
-export function canMoveTask(user: Profile, task: Task): boolean {
-  return canEditTask(user, task);
+export function canMoveTask(user: Profile, _task: Task): boolean {
+  return user.role === "super_admin" || user.role === "manager";
 }
 
 export function canComment(user: Profile): boolean {

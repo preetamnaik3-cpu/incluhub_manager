@@ -3,7 +3,7 @@
 import { ROLE_CONFIG } from "@/lib/roles";
 import type { Task, TaskPriority } from "@/lib/types";
 import { cn, formatDate } from "@/lib/utils";
-import { useSortable } from "@dnd-kit/sortable";
+import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { Calendar, GripVertical } from "lucide-react";
 
@@ -23,13 +23,14 @@ export function TaskCardItem({
   onClick: () => void;
   canDrag: boolean;
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: task.id, disabled: !canDrag });
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: task.id,
+    disabled: !canDrag,
+  });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  const style = transform
+    ? { transform: CSS.Translate.toString(transform) }
+    : undefined;
 
   return (
     <div
@@ -37,20 +38,23 @@ export function TaskCardItem({
       style={style}
       className={cn(
         "group rounded-xl border border-neutral-200 bg-white p-3 shadow-sm transition hover:shadow-md",
-        isDragging && "rotate-1 opacity-90 shadow-lg"
+        isDragging && "opacity-40",
+        canDrag && "cursor-grab active:cursor-grabbing"
       )}
+      {...(canDrag ? { ...attributes, ...listeners } : {})}
     >
       <div className="flex items-start gap-2">
         {canDrag && (
-          <button
-            {...attributes}
-            {...listeners}
-            className="mt-0.5 cursor-grab text-neutral-300 hover:text-neutral-500 active:cursor-grabbing"
-          >
+          <span className="mt-0.5 text-neutral-300 group-hover:text-neutral-500">
             <GripVertical className="h-4 w-4" />
-          </button>
+          </span>
         )}
-        <button onClick={onClick} className="flex-1 text-left">
+        <button
+          type="button"
+          onClick={onClick}
+          onPointerDown={(e) => e.stopPropagation()}
+          className="flex-1 text-left"
+        >
           <p className="text-sm font-medium text-neutral-900">{task.title}</p>
           {task.description && (
             <p className="mt-1 line-clamp-2 text-xs text-neutral-500">
